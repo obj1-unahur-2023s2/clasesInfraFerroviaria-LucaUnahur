@@ -1,0 +1,49 @@
+import formaciones.*
+import vagones.*
+describe "Formacion" {
+	const formacion = new Formacion()
+	const pasajero_1 = new VagonDePasajeros(ancho=4, largo=10, tieneBanios=true)
+	const pasajero_2 = new VagonDePasajeros(ancho=2, largo=7, tieneBanios=false, estaOrdenado=false)
+	const carga_1 = new VagonDeCarga(cargaMaximaIdeal=6800 , maderaSuelta=5)
+	const dormitorio_1= new VagonesDormitorio(compartimentos=8, camasPorCompartimento=3)
+
+	method initialize() {
+		formacion.agregarVagon(pasajero_1)
+		formacion.agregarVagon(pasajero_2)
+		formacion.agregarVagon(carga_1)
+		formacion.agregarVagon(dormitorio_1)
+	}
+	
+	test "cantidad de pasajeros que puede llevar antes del mantenimiento"{
+		assert.equals(165,formacion.capacidadDePasajerosTotal())
+	}
+	
+	test "cantidad de pasajeros que puede llevar luego del mantenimiento"{
+		formacion.realizarMantenimientoDeFormacion()
+		assert.equals(180,formacion.capacidadDePasajerosTotal())
+	}
+	test "cantidad de vagones Populares antes del mantenimiento"{
+		assert.equals(1,formacion.cantidadDeVagonesPopulares())
+	}
+	
+	test "cantidad de vagones Populares luego del mantenimiento"{
+		formacion.realizarMantenimientoDeFormacion()
+		assert.equals(2,formacion.cantidadDeVagonesPopulares())
+	}
+	test "La formacion es carguera antes del mantenimiento"{
+		assert.notThat(formacion.esFormacionCarguera())
+	}
+	test "La formacion es carguera luego del mantenimiento"{
+		formacion.realizarMantenimientoDeFormacion()
+		assert.notThat(formacion.esFormacionCarguera())
+	}
+	
+	test "dispersion de pesos antes del Matenimiento" {
+		assert.equals(4380, formacion.dispersionDePesos())
+	}
+	
+	test " dispersion de pesos despues del mantenimiento" {
+		formacion.realizarMantenimientoDeFormacion()
+		assert.equals(4380, formacion.dispersionDePesos())
+	}
+}
